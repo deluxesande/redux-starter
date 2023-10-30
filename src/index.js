@@ -1,11 +1,21 @@
-import { compose, pipe } from "lodash/fp";
+import store from "./store";
+import * as actions from "./actionTypes";
+import { bugAdded, bugResolved } from "./actions";
 
-const input = "Hello world";
+const unsubscribe = store.subscribe(() => {
+    console.log("Store changed!", store.getState());
+});
 
-const trim = (str) => str.trim();
-const wrapperDiv = (str) => `<div>${str}</div>`;
+store.dispatch(bugAdded("Bug 1"));
 
-const transform = pipe(trim, wrapperDiv);
+unsubscribe();
 
-const result = transform(input);
-console.log(result);
+// store.dispatch({
+//     type: actions.BUG_REMOVED,
+//     payload: {
+//         id: 1,
+//     },
+// });
+
+store.dispatch(bugResolved(1));
+console.log(store.getState());
